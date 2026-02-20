@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nathaniel Lowe | Woodwind Instruction · Williamsburg, VA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #0f0d0a;
+      --cream:  #f5f0e8;
+      --gold:   #c9932a;
+      --amber:  #e8a830;
+      --muted:  #8a7d6a;
+      --card:   #1a1610;
+      --rule:   rgba(201,147,42,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--ink);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Staff lines decoration */
+    .hero::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 80px;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent 0px,
+        transparent 14px,
+        rgba(201,147,42,0.08) 14px,
+        rgba(201,147,42,0.08) 15px
+      );
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 7.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.4s;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-tagline {
+      margin-top: 2rem;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.6s;
+    }
+
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.8s;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      background: var(--amber);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201,147,42,0.4);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid rgba(245,240,232,0.25);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: linear-gradient(to bottom, rgba(15,13,10,0.95), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 1.5rem 0;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-body p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(245,240,232,0.8);
+      margin-bottom: 1.2rem;
+    }
+
+    .stats-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding-top: 0.5rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--gold);
+      padding: 1.25rem 1.5rem;
+      border-radius: 2px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.25s; }
+    .stat-card:nth-child(3) { animation-delay: 0.4s; }
+    .stat-card:nth-child(4) { animation-delay: 0.55s; }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--amber);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      font-weight: 300;
+    }
+
+    /* ── INSTRUMENTS ── */
+    .instruments-bg {
+      background: var(--card);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .instruments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .instrument-tile {
+      background: var(--ink);
+      border: 1px solid var(--rule);
+      padding: 1.75rem 1.5rem;
+      border-radius: 2px;
+      text-align: center;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .instrument-tile:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .instrument-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .instrument-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.35rem;
+    }
+
+    .instrument-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── LESSONS ── */
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2.5rem;
+    }
+
+    .lessons-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 2rem;
+      border-radius: 2px;
+    }
+
+    .lessons-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      margin-bottom: 1rem;
+      color: var(--amber);
+    }
+
+    .lessons-card ul {
+      list-style: none;
+    }
+
+    .lessons-card li {
+      font-size: 0.92rem;
+      color: rgba(245,240,232,0.75);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .lessons-card li::before {
+      content: '♩';
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .lessons-card li:last-child { border-bottom: none; }
+
+    .price-callout {
+      margin-top: 1.5rem;
+      background: linear-gradient(135deg, rgba(201,147,42,0.15), rgba(201,147,42,0.05));
+      border: 1px solid var(--gold);
+      border-radius: 2px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--amber);
+      line-height: 1;
+    }
+
+    .price-period {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      text-transform: uppercase;
+    }
+
+    /* ── CREDENTIALS ── */
+    .cred-bg {
+      background: var(--card);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cred-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .cred-group h4 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .cred-item {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.88rem;
+      color: rgba(245,240,232,0.75);
+      line-height: 1.4;
+    }
+
+    .cred-item:last-child { border-bottom: none; }
+
+    .cred-highlight {
+      color: var(--cream);
+      font-weight: 500;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      max-width: 600px;
+    }
+
+    #contact .section-title { margin-bottom: 0.75rem; }
+
+    .contact-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .contact-row a {
+      color: var(--amber);
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.88rem;
+    }
+
+    .contact-row a:hover { text-decoration: underline; }
+
+    .contact-icon {
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--rule);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .lessons-grid { grid-template-columns: 1fr; }
+      .cred-grid { grid-template-columns: 1fr; }
+      section { padding: 4rem 1.5rem; }
+    }
+
+    /* Contact section centering */
+    section#contact { margin: 0 auto; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">N. Lowe</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#instruments">Instruments</a></li>
+      <li><a href="#lessons">Lessons</a></li>
+      <li><a href="#credentials">Credentials</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">Woodwind Instruction · Williamsburg, VA</p>
+    <h1 class="hero-name">Nathaniel<br /><em>Lowe</em></h1>
+    <p class="hero-tagline">
+      All-Virginia Jazz musician &amp; Williamsburg Youth Orchestra member offering private woodwind lessons for 5th–9th grade students.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#contact">Book a Lesson</a>
+      <a class="btn btn-ghost" href="#about">Learn More</a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">About</p>
+    <h2 class="section-title">A Musician Who<br /><em>Knows the Journey</em></h2>
+    <hr class="rule" />
+    <div class="about-grid">
+      <div class="about-body">
+        <p>
+          Hi, I'm Nathaniel — a Jamestown High School junior with 7 years of woodwind performance experience across classical, jazz, and community music. I play saxophone, clarinet, oboe, and English horn at a competitive level, and I know firsthand what it takes to go from a squeaky first note to a confident performer.
+        </p>
+        <p>
+          I teach beginners and intermediate players in 5th through 9th grade. Whether your child is just picking up their school instrument for the first time or looking to level up before All-District auditions, I'll meet them exactly where they are.
+        </p>
+        <p>
+          Lessons are available at your home, my home in Williamsburg, a local library, or online — whatever works best for your family.
+        </p>
+      </div>
+      <div class="stats-col">
+        <div class="stat-card">
+          <div class="stat-num">7</div>
+          <div class="stat-label">Years of performance experience</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">5</div>
+          <div class="stat-label">Instruments taught</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">All-VA</div>
+          <div class="stat-label">2025 All Virginia Jazz Band · Baritone Sax</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">All-D</div>
+          <div class="stat-label">2026 All District Concert Band · Baritone Sax</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUMENTS -->
+  <div class="instruments-bg">
+    <section id="instruments" style="max-width:1100px; margin:0 auto;">
+      <p class="section-label">What I Teach</p>
+      <h2 class="section-title">Instruments</h2>
+      <hr class="rule" />
+      <div class="instruments-grid">
+        <div class="instrument-tile">
+          <div class="instrument-icon">🎷</div>
+          <div class="instrument-name">Alto Saxophone</div>
+          <div class="instrument-note">Beginner · Intermediate</div>
+        </div>
+        <div class="instrument-tile">
+          <div class="instrument-icon">🎷</div>
+          <div class="instrument-name">Tenor Saxophone</div>
+          <div class="instrument-note">Beginner · Intermediate</div>
+        </div>
+        <div class="instrument-tile">
+          <div class="instrument-icon">🎷</div>
+          <div class="instrument-name">Baritone Saxophone</div>
+          <div class="instrument-note">Beginner · Intermediate</div>
+        </div>
+        <div class="instrument-tile">
+          <div class="instrument-icon">🎵</div>
+          <div class="instrument-name">Clarinet</div>
+          <div class="instrument-note">B♭ &amp; Bass · Beginner · Intermediate</div>
+        </div>
+        <div class="instrument-tile">
+          <div class="instrument-icon">🎼</div>
+          <div class="instrument-name">Oboe &amp; Bassoon</div>
+          <div class="instrument-note">Beginner · Intermediate</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- LESSONS -->
+  <section id="lessons">
+    <p class="section-label">Lesson Details</p>
+    <h2 class="section-title">How It Works</h2>
+    <hr class="rule" />
+    <div class="lessons-grid">
+      <div class="lessons-card">
+        <h3>What to Expect</h3>
+        <ul>
+          <li>Tailored curriculum for each student's level &amp; goals</li>
+          <li>Focus on tone, technique, rhythm, and music reading</li>
+          <li>Support for school band &amp; All-District audition prep</li>
+          <li>Fun repertoire alongside method book fundamentals</li>
+          <li>Practice strategies that actually work for busy kids</li>
+          <li>Progress check-ins and parent updates</li>
+        </ul>
+      </div>
+      <div>
+        <div class="lessons-card">
+          <h3>Lesson Formats</h3>
+          <ul>
+            <li>In-person at my home (Williamsburg, VA)</li>
+            <li>In-person at your home</li>
+            <li>Neutral location (library, community center)</li>
+            <li>Online via Zoom or FaceTime</li>
+          </ul>
+        </div>
+        <div class="price-callout" style="margin-top:1.5rem;">
+          <div class="price-amount">$40</div>
+          <div class="price-period">Per Hour · All Instruments</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDENTIALS -->
+  <div class="cred-bg">
+    <section id="credentials" style="max-width:1100px; margin:0 auto;">
+      <p class="section-label">Credentials</p>
+      <h2 class="section-title">Experience &amp; Honors</h2>
+      <hr class="rule" />
+      <div class="cred-grid">
+        <div class="cred-group">
+          <h4>Ensembles</h4>
+          <div class="cred-item"><span class="cred-highlight">Jamestown High School Bands</span><br/>Concert Band, Jazz Band &amp; specialty ensembles</div>
+          <div class="cred-item"><span class="cred-highlight">Williamsburg Youth Orchestra</span><br/>Symphony Orchestra &amp; Wind Ensemble — Principal Bari Sax</div>
+          <div class="cred-item"><span class="cred-highlight">Dog Street Brass Band</span><br/>Traditional brass band &amp; community concerts</div>
+        </div>
+        <div class="cred-group">
+          <h4>Honors &amp; Awards</h4>
+          <div class="cred-item"><span class="cred-highlight">2025 All Virginia Jazz Band</span><br/>Baritone Saxophone</div>
+          <div class="cred-item"><span class="cred-highlight">2026 All District Concert Band</span><br/>Baritone Saxophone</div>
+          <div class="cred-item"><span class="cred-highlight">VBODA All Star Musician</span><br/>District 8 Jazz Assessment 2025</div>
+          <div class="cred-item"><span class="cred-highlight">Outstanding Musician Award</span><br/>VBODA District 8 Jazz Assessment 2023</div>
+        </div>
+        <div class="cred-group">
+          <h4>Training &amp; Camps</h4>
+          <div class="cred-item"><span class="cred-highlight">Brandon Musko</span><br/>Good Shot Judy · Saxophone/Clarinet</div>
+          <div class="cred-item"><span class="cred-highlight">Aidan Sears</span><br/>Glenn Miller Orchestra · Bari Sax/Jazz</div>
+          <div class="cred-item"><span class="cred-highlight">Grace Huntoon</span><br/>U.S. Air Force Band · Oboe</div>
+          <div class="cred-item"><span class="cred-highlight">Summer Academies</span><br/>JMU · Univ. of Southern Maine · GMU Jazz Camp</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" style="text-align:center; max-width:600px; margin:0 auto;">
+    <p class="section-label">Get Started</p>
+    <h2 class="section-title">Ready to Play?</h2>
+    <hr class="rule" />
+    <p class="contact-sub">
+      Reach out to schedule a first lesson or ask any questions. First lesson availability is often within the week.
+    </p>
+    <div class="contact-info">
+      <div class="contact-row">
+        <span class="contact-icon">📞</span>
+        <a href="tel:7577076294">(757) 707-6294</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">✉️</span>
+        <a href="mailto:nathaniellowe1370@gmail.com">nathaniellowe1370@gmail.com</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">📍</span>
+        <span style="font-size:0.88rem; color:var(--muted);">Williamsburg, VA · In-Person &amp; Online</span>
+      </div>
+    </div>
+    <a class="btn btn-primary" href="mailto:nathaniellowe1370@gmail.com">Send a Message</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Nathaniel Lowe · Williamsburg, VA · Woodwind Instruction</p>
+  </footer>
+
+</body>
+</html>
